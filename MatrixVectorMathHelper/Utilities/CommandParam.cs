@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace Notepad2.Utilities
@@ -42,6 +43,7 @@ namespace Notepad2.Utilities
         {
             if (parameter is Parameter p)
                 return _canExecute == null ? true : _canExecute(p);
+            Debug.WriteLine($"CommandParam: CanExecute parameter is null");
             return false;
         }
 

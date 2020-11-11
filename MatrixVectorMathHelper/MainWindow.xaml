@@ -3,35 +3,222 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MatrixVectorMathHelper"
+        xmlns:local="clr-namespace:MatrixVectorMathHelper" xmlns:controls="clr-namespace:MatrixVectorMathHelper.Controls" xmlns:viewmodels="clr-namespace:MatrixVectorMathHelper.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" 
         Height="720" Width="1280"
         Style="{DynamicResource CustomWindowStyle}">
+    <Window.DataContext>
+        <viewmodels:MainViewModel/>
+    </Window.DataContext>
     <Grid>
-        <GroupBox Margin="5" Header="Inputs" HorizontalAlignment="Left" Width="300">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="41*"/>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="88*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Margin="5,5,3,5" Header="Inputs">
             <Grid>
-                <GroupBox Header="Vectors">
-                    
+                <GroupBox DataContext="{Binding Inputs}" Height="250" VerticalAlignment="Top">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Vectors" VerticalAlignment="Center"/>
+                            <Rectangle Grid.Column="0" Margin="5, 0" Width="1" HorizontalAlignment="Right" Fill="{DynamicResource ControlBrightDefaultBackground}"/>
+                            <Button Content="Clear" Command="{Binding ClearVectorsCommand, Mode=OneTime}" Width="40"/>
+                            <Button Content="Remove Selected" Command="{Binding RemoveSelectedVectorCommand, Mode=OneTime}" Width="105" Margin="2 0 0 0"/>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid>
+                        <ListBox Margin="0,0,0,31"
+                                 ItemsSource="{Binding Vectors, Mode=OneTime}"
+                                 SelectedItem="{Binding SelectedVector, UpdateSourceTrigger=PropertyChanged}"
+                                 ScrollViewer.CanContentScroll="False"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <controls:ReadOnlyVector3Control DataContext="{Binding}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <controls:Vector3Control DataContext="{Binding InputVector, Mode=OneTime}" Margin="50,0,0,0" Background="{DynamicResource ControlDefaultBackground}" BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="0 1 1 1" Height="28" VerticalAlignment="Bottom"/>
+                        <Button Content="Add" Command="{Binding AddVectorFromInputCommand, Mode=OneTime}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="28" Width="50" BorderThickness="1 1 1 1"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox DataContext="{Binding Inputs}" Margin="0,253,0,0">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Matrixes" VerticalAlignment="Center"/>
+                            <Rectangle Grid.Column="0" Margin="5, 0" Width="1" HorizontalAlignment="Right" Fill="{DynamicResource ControlBrightDefaultBackground}"/>
+                            <Button Content="Clear" Command="{Binding ClearMatrixesCommand, Mode=OneTime}" Width="40"/>
+                            <Button Content="Remove Selected" Command="{Binding RemoveSelectedMatrixCommand, Mode=OneTime}" Width="105" Margin="2 0 0 0"/>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid>
+                        <ListBox Margin="0,0,0,98"
+                                 ItemsSource="{Binding Matrixes, Mode=OneTime}"
+                                 SelectedItem="{Binding SelectedMatrix, UpdateSourceTrigger=PropertyChanged}"
+                                 ScrollViewer.CanContentScroll="False"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <controls:ReadOnlyMatrix4Control DataContext="{Binding}" MinWidth="120"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Content="Add" Command="{Binding AddMatrixFromInputCommand, Mode=OneTime}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="95" Width="50" BorderThickness="1 1 1 1"/>
+                        <Grid Height="95" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                            </Grid.RowDefinitions>
+                            <Button Command="{Binding SetInputMatrixContentsCommand, Mode=OneTime}" CommandParameter="i" Content="Identity&#xA;Matrix" BorderThickness="1 1 1 0"/>
+                            <Button Command="{Binding SetInputMatrixContentsCommand, Mode=OneTime}" CommandParameter="z" Content="Fill Zeros" BorderThickness="1 1 1 1" Grid.Row="1"/>
+                        </Grid>
+                        <controls:Matrix4Control DataContext="{Binding InputMatrix, Mode=OneTime}" Margin="50,0,75,0" 
+                                                 Background="{DynamicResource ControlDefaultBackground}"
+                                                 BorderBrush="{DynamicResource ControlDefaultBorderBrush}" 
+                                                 BorderThickness="0 1 0 1" 
+                                                 Height="95" VerticalAlignment="Bottom"/>
+                    </Grid>
                 </GroupBox>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Main Matrix" Margin="310,5,5,0" Height="400" VerticalAlignment="Top">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0 5"/>
+        <GroupBox Margin="3,5,5,5" Grid.Column="2">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Maths" VerticalAlignment="Center"/>
+                    <Rectangle Grid.Column="0" Margin="5, 0" Width="1" HorizontalAlignment="Right" Fill="{DynamicResource ControlBrightDefaultBackground}"/>
+                    <Button Command="{Binding ShowHelpCommand, Mode=OneTime}" Content="Help" Width="40"/>
+                </StackPanel>
+            </GroupBox.Header>
+            <TabControl>
+                <TabItem Header="Matrix only">
+                    <TabControl TabStripPlacement="Bottom">
+                        <TabItem Header="Multiplication">
+                            <Grid>
+                                <GroupBox Header="Dot Product" Height="200" VerticalAlignment="Top">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="200*"/>
+                                            <ColumnDefinition Width="36"/>
+                                            <ColumnDefinition Width="200*"/>
+                                            <ColumnDefinition Width="42"/>
+                                            <ColumnDefinition Width="200*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Margin="6,6,6,0" VerticalAlignment="Top" Height="24" Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20*"/>
+                                                <ColumnDefinition Width="18*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Content="Get from Active" Command="{Binding SetMatrixFromActive, Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.DotProductInput1, Mode=OneTime}" Grid.Column="0"/>
+                                            <Button Content="Set as Active"   Command="{Binding SetMatrixAsActive,   Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.DotProductInput1, Mode=OneTime}" Grid.Column="1" BorderThickness="0 1 1 1 "/>
+                                        </Grid>
+                                        <Grid Margin="6,6,6,0" VerticalAlignment="Top" Height="24" Grid.Column="2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20*"/>
+                                                <ColumnDefinition Width="18*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Content="Get from Active" Command="{Binding SetMatrixFromActive, Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.DotProductInput2, Mode=OneTime}" Grid.Column="0"/>
+                                            <Button Content="Set as Active"   Command="{Binding SetMatrixAsActive,   Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.DotProductInput2, Mode=OneTime}" Grid.Column="1" BorderThickness="0 1 1 1 "/>
+                                        </Grid>
+                                        <Grid Margin="6,6,6,0" VerticalAlignment="Top" Height="24" Grid.Column="4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20*"/>
+                                                <ColumnDefinition Width="18*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Content="Get from Active" Command="{Binding SetMatrixFromActive, Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.DotProductOutput, Mode=OneTime}" Grid.Column="0"/>
+                                            <Button Content="Set as Active"   Command="{Binding SetMatrixAsActive,   Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.DotProductOutput, Mode=OneTime}" Grid.Column="1" BorderThickness="0 1 1 1 "/>
+                                        </Grid>
+                                        <TextBlock Text="X" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Margin="0 30 0 0"/>
+                                        <Button Command="{Binding Maths.MatrixCalculations.CalculateDotProductCommand, Mode=OneTime}" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3" Margin="0 30 0 0">
+                                            <TextBlock Text="=" Margin="0 0 0 6"/>
+                                        </Button>
+                                        <controls:Matrix4Control DataContext="{Binding Maths.MatrixCalculations.DotProductInput1, Mode=OneTime}" Margin="0,30,0,0"/>
+                                        <controls:Matrix4Control DataContext="{Binding Maths.MatrixCalculations.DotProductInput2, Mode=OneTime}" Margin="0,30,0,0" Grid.Column="2"/>
+                                        <controls:Matrix4Control DataContext="{Binding Maths.MatrixCalculations.DotProductOutput, Mode=OneTime}" Margin="0,30,0,0" Grid.Column="4"/>
+                                    </Grid>
+                                </GroupBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Addition/Subtraction/Division">
+                            <Grid>
 
-            </Grid>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+                <TabItem Header="Vectors only">
+                    <TabControl TabStripPlacement="Bottom">
+
+                    </TabControl>
+                </TabItem>
+                <TabItem Header="Matrix and Vectors">
+                    <TabControl TabStripPlacement="Bottom">
+                        <TabItem Header="Rotation/Scale">
+                            <Grid>
+                                <GroupBox Header="Rotation" Height="200" VerticalAlignment="Top">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="248*"/>
+                                            <ColumnDefinition Width="36"/>
+                                            <ColumnDefinition Width="289*"/>
+                                            <ColumnDefinition Width="247*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid Margin="6,6,6,0" VerticalAlignment="Top" Height="24" Grid.Column="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20*"/>
+                                                <ColumnDefinition Width="18*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Content="Get from Active" Command="{Binding SetMatrixFromActive, Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.RotationMatrixInput, Mode=OneTime}" Grid.Column="0"/>
+                                            <Button Content="Set as Active"   Command="{Binding SetMatrixAsActive,   Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.RotationMatrixInput, Mode=OneTime}" Grid.Column="1" BorderThickness="0 1 1 1 "/>
+                                        </Grid>
+                                        <Grid Margin="6,6,6,0" VerticalAlignment="Top" Height="24" Grid.Column="3">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20*"/>
+                                                <ColumnDefinition Width="18*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Content="Get from Active" Command="{Binding SetMatrixFromActive, Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.RotationMatrixOutput, Mode=OneTime}" Grid.Column="0"/>
+                                            <Button Content="Set as Active"   Command="{Binding SetMatrixAsActive,   Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.RotationMatrixOutput, Mode=OneTime}" Grid.Column="1" BorderThickness="0 1 1 1 "/>
+                                        </Grid>
+                                        <Grid Grid.Column="2" Margin="5,40,0,10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="18*"/>
+                                                <ColumnDefinition Width="5*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                            </Grid.RowDefinitions>
+                                            <Button Content="Set X from Active" Command="{Binding SetVectorFromActive, Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.RotationXInput, Mode=OneTime}" Margin="0,4" Grid.Row="0" ToolTip="Only the X component will be used, Y and Z are ignored"/>
+                                            <Button Content="Set Y from Active" Command="{Binding SetVectorFromActive, Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.RotationYInput, Mode=OneTime}" Margin="0,4" Grid.Row="1" ToolTip="Only the Y component will be used, X and Z are ignored"/>
+                                            <Button Content="Set Z from Active" Command="{Binding SetVectorFromActive, Mode=OneTime}" CommandParameter="{Binding Maths.MatrixCalculations.RotationZInput, Mode=OneTime}" Margin="0,4" Grid.Row="2" ToolTip="Only the Z component will be used, X and Y are ignored"/>
+                                            <controls:Vector3Control DataContext="{Binding Maths.MatrixCalculations.RotationXInput, Mode=OneTime}" Margin="0,5" Grid.Row="0" Grid.Column="1" Height="Auto"/>
+                                            <controls:Vector3Control DataContext="{Binding Maths.MatrixCalculations.RotationYInput, Mode=OneTime}" Margin="0,5,0,4" Grid.Row="1" Grid.Column="1" Height="Auto"/>
+                                            <controls:Vector3Control DataContext="{Binding Maths.MatrixCalculations.RotationZInput, Mode=OneTime}" Margin="0,5,0,4" Grid.Row="2" Grid.Column="1" Height="Auto"/>
+                                            <Button Content="=" Command="{Binding Maths.MatrixCalculations.CalculateRotationCommand, Mode=OneTime}" CommandParameter="x" Margin="0 4" Grid.Row="0" Grid.Column="2"/>
+                                            <Button Content="=" Command="{Binding Maths.MatrixCalculations.CalculateRotationCommand, Mode=OneTime}" CommandParameter="y" Margin="0 4" Grid.Row="1" Grid.Column="2"/>
+                                            <Button Content="=" Command="{Binding Maths.MatrixCalculations.CalculateRotationCommand, Mode=OneTime}" CommandParameter="z" Margin="0 4" Grid.Row="2" Grid.Column="2"/>
+                                        </Grid>
+                                        <TextBlock Text="X" FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Margin="4,63,3,32"/>
+                                        <controls:Matrix4Control DataContext="{Binding Maths.MatrixCalculations.RotationMatrixInput, Mode=OneTime}" Margin="0,30,0,0"/>
+                                        <controls:Matrix4Control DataContext="{Binding Maths.MatrixCalculations.RotationMatrixOutput, Mode=OneTime}" Margin="0,30,0,0" Grid.Column="3"/>
+                                    </Grid>
+                                </GroupBox>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+            </TabControl>
         </GroupBox>
     </Grid>
 </Window>

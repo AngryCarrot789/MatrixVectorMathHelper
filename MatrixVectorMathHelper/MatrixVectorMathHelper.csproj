@@ -59,9 +59,23 @@
     <Compile Include="Controls\Matrix4Control.xaml.cs">
       <DependentUpon>Matrix4Control.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Matrix4ViewModel.cs" />
+    <Compile Include="Controls\ReadOnlyMatrix4Control.xaml.cs">
+      <DependentUpon>ReadOnlyMatrix4Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ReadOnlyVector3Control.xaml.cs">
+      <DependentUpon>ReadOnlyVector3Control.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Vector3Control.xaml.cs">
       <DependentUpon>Vector3Control.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Vector3ViewModel.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
+    <Compile Include="Maths\MathAddons.cs" />
+    <Compile Include="Maths\Matrix.cs" />
+    <Compile Include="Maths\Vector3.cs" />
+    <Compile Include="Maths\Vector4.cs" />
+    <Compile Include="Maths\ViewModelMathExtensions.cs" />
     <Compile Include="Themes\ColourfulDarkTheme.xaml.cs">
       <DependentUpon>ColourfulDarkTheme.xaml</DependentUpon>
     </Compile>
@@ -78,7 +92,22 @@
     <Compile Include="Utilities\BaseViewModel.cs" />
     <Compile Include="Utilities\Command.cs" />
     <Compile Include="Utilities\CommandParam.cs" />
+    <Compile Include="ViewModels\InputsViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\MathsViewModel.cs" />
+    <Compile Include="ViewModels\MatrixCalculationsViewModel.cs" />
+    <Compile Include="Views\HelpWindow.xaml.cs">
+      <DependentUpon>HelpWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\Matrix4Control.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ReadOnlyMatrix4Control.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ReadOnlyVector3Control.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -114,9 +143,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\HelpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Maths\MatrixViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

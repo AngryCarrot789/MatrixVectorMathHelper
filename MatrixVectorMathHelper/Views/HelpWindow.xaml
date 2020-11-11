@@ -1,0 +1,14 @@
+﻿<Window x:Class="MatrixVectorMathHelper.Views.HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MatrixVectorMathHelper.Views"
+        mc:Ignorable="d"
+        Title="HelpWindow" 
+        Height="450" Width="800"
+        Style="{DynamicResource CustomToolWindowStyle}">
+    <Grid>
+        <TextBlock Margin="5"><Run Text="On the right is the inputs. for adding vectors, at the bottom of the vector groupbox input your vector3's values into the x/y/z and then click add."/><LineBreak/><Run Text="same for matrixes, only you input 16 values. then click add."/><LineBreak/><Run Text="Selecting a matrix or vector sets them as the &quot;actively selected&quot; matrix or vector, which can be used with math. so far only matrix multiplication (aka dot product) is done. Go into Matrix Only and on the bottom goto Multiplication. then you can click Set from Active matrix. this will set that matrix below to the selected matrix on the inputs groupbox (on the left). then you can click the = sign to do the calculation. then in the right matrix is a Set as ACtive Matrix, which will set the selected/active matrix as that one. the first 2 will get from the active matrix, and the last one sets that active matrix. you can select another matrix in the inputs if you want to set it to that."/></TextBlock>
+    </Grid>
+</Window>
